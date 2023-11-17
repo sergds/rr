@@ -2,13 +2,16 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"image"
 	"image/color"
 	"image/color/palette"
 	"image/png"
+	"log"
 	"math"
 	"math/rand"
 	"net/http"
+	"runtime"
 	"strconv"
 	"time"
 
@@ -71,14 +74,18 @@ func rr_matching_image(basehue string, ch *chan *image.RGBA) {
 }
 
 func to_palleted(img *image.RGBA) *image.Paletted {
-	return &image.Paletted{Pix: img.Pix, Stride: img.Stride, Rect: img.Rect, Palette: palette.Plan9}
+	return &image.Paletted{Pix: img.Pix, Stride: img.Stride, Rect: img.Rect, Palette: palette.WebSafe}
 }
 
 func main() {
+	log.Println("RR Gen " + "(" + runtime.Version() + ")")
+	log.Println("GIN version " + gin.Version)
+	log.Println("Serving http://127.0.0.1:6429")
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	router.MaxMultipartMemory = 8 << 20
 	router.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "штука, генерирующая 10 цветных полос.\n/rr\n/rr_matching\nможно даже параметром задать основной оттенок: /rr_matching?basehsv=200 (лучше работает со значениями от 40 до 320)")
+		c.String(http.StatusOK, "(Animated) Color stripes generator.\n\nUsage:\n/rr\n/rr_matching\n/anim can also be appended to the end of path for APNG output\nParameters:\nbasehsv: hue integer value in range 0-360. Only works in rr_matching (example: /rr_matching?basehsv=200)\ndenominator: integer, defines the frame delay of an APNG in anim mode (example: /rr_matching/anim?basehsv=235&denominator=4)\n\nRR Gen by sergds ("+runtime.Version()+"): last updated 1 June 2023")
 	})
 	router.GET("/rr", func(c *gin.Context) {
 		buf := new(bytes.Buffer)
@@ -145,6 +152,9 @@ func main() {
 			Frames: make([]apng.Frame, 4),
 		}
 		basehue := c.Query("basehsv")
+		if basehue == "" {
+			basehue = fmt.Sprint(rand.Intn(360 - 1))
+		}
 		delay := c.Query("denominator")
 		if delay == "" {
 			delay = "2"
