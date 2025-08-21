@@ -12,4 +12,6 @@ COPY --from=build /src/rr /rr
 
 ENTRYPOINT ["/rr"]
 
+EXPOSE 6429/tcp
+
 CMD ['']

@@ -85,7 +85,7 @@ func main() {
 	router := gin.Default()
 	router.MaxMultipartMemory = 8 << 20
 	router.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "(Animated) Color stripes generator.\n\nUsage:\n/rr\n/rr_matching\n/anim can also be appended to the end of path for APNG output\nParameters:\nbasehsv: hue integer value in range 0-360. Only works in rr_matching (example: /rr_matching?basehsv=200)\ndenominator: integer, defines the frame delay of an APNG in anim mode (example: /rr_matching/anim?basehsv=235&denominator=4)\n\nRR Gen by sergds ("+runtime.Version()+"): last updated 1 June 2023")
+		c.String(http.StatusOK, "(Animated) Color stripes generator.\n\nUsage:\n/rr\n/rr_matching\n/anim can also be appended to the end of path for APNG output\nParameters:\nbasehsv: hue integer value in range 0-360. Only works in rr_matching (example: /rr_matching?basehsv=200)\ndenominator: integer, defines the frame delay of an APNG in anim mode (example: /rr_matching/anim?basehsv=235&denominator=4)\n\nRR Gen by sergds ("+runtime.Version()+"): last updated 21 August 2025")
 	})
 	router.GET("/rr", func(c *gin.Context) {
 		buf := new(bytes.Buffer)
