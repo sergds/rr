@@ -80,7 +80,7 @@ func to_palleted(img *image.RGBA) *image.Paletted {
 func main() {
 	log.Println("RR Gen " + "(" + runtime.Version() + ")")
 	log.Println("GIN version " + gin.Version)
-	log.Println("Serving http://127.0.0.1:6429")
+	log.Println("Serving http://0.0.0.0:6429")
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	router.MaxMultipartMemory = 8 << 20
